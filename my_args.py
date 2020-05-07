@@ -34,6 +34,8 @@ parser.add_argument('--channels', '-c', type=int,default=3,choices = [1,3], help
 parser.add_argument('--filter_size', '-f', type=int, default=4, help = 'the size of filters used (default: 4)',
                     choices=[2,4,6, 5,51]
                     )
+# add to my_args.py
+parser.add_argument('--predict', dest='SAVED_MODEL', default=None, help ='path to the pretrained model weights')
 
 
 parser.add_argument('--lr', type =float, default= 0.002, help= 'the basic learning rate for three subnetworks (default: 0.002)')
