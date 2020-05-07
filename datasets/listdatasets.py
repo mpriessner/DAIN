@@ -1,3 +1,6 @@
+###################################################################################
+# listdatasets.py change
+##################################################################################
 import torch.utils.data as data
 import os
 import os.path
@@ -5,7 +8,7 @@ from scipy.ndimage import imread
 import numpy as np
 import random
 
-def Vimeo_90K_loader(root, im_path, input_frame_size = (3, 256, 448), output_frame_size = (3, 256, 448), data_aug = True):
+def Vimeo_90K_loader(root, im_path, input_frame_size = (3, 512, 512), output_frame_size = (3, 512, 512), data_aug = True):
 
 
     root = os.path.join(root,'sequences',im_path)
@@ -23,8 +26,8 @@ def Vimeo_90K_loader(root, im_path, input_frame_size = (3, 256, 448), output_fra
     im_pre1 = imread(path_pre1)
     im_mid = imread(path_mid)
 
-    h_offset = random.choice(range(256 - input_frame_size[1] + 1))
-    w_offset = random.choice(range(448 - input_frame_size[2] + 1))
+    h_offset = random.choice(range(512 - input_frame_size[1] + 1))
+    w_offset = random.choice(range(512 - input_frame_size[2] + 1))
 
     im_pre2 = im_pre2[h_offset:h_offset + input_frame_size[1], w_offset: w_offset + input_frame_size[2], :]
     im_pre1 = im_pre1[h_offset:h_offset + input_frame_size[1], w_offset: w_offset + input_frame_size[2], :]
