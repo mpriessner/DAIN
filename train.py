@@ -238,7 +238,7 @@ def train():
         training_losses.reset()
 
 
-      print("\t\tFinished an epoch, Check and Save the model weights")
+        print("\t\tFinished an epoch, Check and Save the model weights")
             # we check the validation loss instead of training loss. OK~
         if saved_total_loss >= val_total_losses.avg:
             saved_total_loss = val_total_losses.avg
