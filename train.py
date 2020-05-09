@@ -237,13 +237,16 @@ def train():
         numpy.savetxt(args.log, numpy.array(auxiliary_data), fmt='%.8f', delimiter=',')
         training_losses.reset()
 
-        print("\t\tFinished an epoch, Check and Save the model weights")
+
+      print("\t\tFinished an epoch, Check and Save the model weights")
             # we check the validation loss instead of training loss. OK~
         if saved_total_loss >= val_total_losses.avg:
             saved_total_loss = val_total_losses.avg
             torch.save(model.state_dict(), args.save_path + "/best"+".pth")
             print("\t\tBest Weights updated for decreased validation loss\n")
-
+            shutil.rmtree("/content/drive/My Drive/Colab Notebooks/3.Frame_enhancement/Model/current_training/model_weights")
+            shutil.copytree("/content/DAIN/model_weights", "/content/drive/My Drive/Colab Notebooks/3.Frame_enhancement/Model/current_training/model_weights")
+            
         else:
             print("\t\tWeights Not updated for undecreased validation loss\n")
 
