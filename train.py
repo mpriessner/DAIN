@@ -244,8 +244,8 @@ def train():
             saved_total_loss = val_total_losses.avg
             torch.save(model.state_dict(), args.save_path + "/best"+".pth")
             print("\t\tBest Weights updated for decreased validation loss\n")
-            shutil.rmtree("/content/drive/My Drive/Colab_Notebooks/3.Frame_enhancement/Model/current_training/model_weights")
-            shutil.copytree("/content/DAIN/model_weights", "/content/drive/My Drive/Colab_Notebooks/3.Frame_enhancement/Model/current_training/model_weights")
+            shutil.rmtree("/content/model_weights")
+            shutil.copytree("/content/DAIN/model_weights", "/content/model_weights")
             
         else:
             print("\t\tWeights Not updated for undecreased validation loss\n")
