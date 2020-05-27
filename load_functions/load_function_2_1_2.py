@@ -28,7 +28,7 @@ def get_img_path_list_T(img_path_list, filepath):
 # img_path_list = get_img_path_list_T(img_path_list, filepath, folder_list)
 # img_path_list
 
-def load_img_T(img_path, channel, z):
+def load_img_T(img_path, channel, z, divisor):
     img = AICSImage(img_path)
     img = img.get_image_data("TYX", S=0, Z=z, C=channel)
     # img = img.get_image_data("YX", S=0, T=0, C=0, Z=0)
@@ -40,7 +40,7 @@ def load_img_T(img_path, channel, z):
     return img, x_div, y_div
 # img, x_div, y_div = load_img_T(img_path):
 
-def create_foldersystem_T(root, img_path_list):
+def create_foldersystem_T(root, img_path_list, divisor,ticker):
   #### Create folder structure ####
   img = AICSImage(img_path_list[0])
   # img = img.get_image_data("ZYX", C=0 S=0, T=0,)
@@ -97,7 +97,7 @@ def create_foldersystem_T(root, img_path_list):
   
 # nr_channels, nr_z_slices, nr_timepoints, destination ,multiplyer, channel_dict = create_foldersystem(root, folder_name, img_path_list)
 
-def run_code_T(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slices, multiplyer, channel_dict):
+def run_code_T(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slices, multiplyer, channel_dict, divisor):
   #remove old log file if already existing
   # z-dimension
   # t = 0    ## for some reaosn I need to define the t outside of the function
@@ -111,7 +111,7 @@ def run_code_T(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slic
   for img_path in tqdm(img_path_list):
       for channel in range(nr_channels):
         for z in range(nr_z_slices):
-          img, x_div, y_div = load_img_T(img_path, channel, z)
+          img, x_div, y_div = load_img_T(img_path, channel, z, divisor)
           # print(image_resolution)
           # log the names together
           txt_name_log = open(log_file_name, "a")
