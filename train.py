@@ -244,7 +244,8 @@ def train():
             saved_total_loss = val_total_losses.avg
             torch.save(model.state_dict(), args.save_path + "/best"+".pth")
             print("\t\tBest Weights updated for decreased validation loss\n")
-            shutil.rmtree("/content/model_weights")
+            if os.path.exists("/content/model_weights")==True:
+              shutil.rmtree("/content/model_weights")
             shutil.copytree("/content/DAIN/model_weights", "/content/model_weights")
             
         else:
