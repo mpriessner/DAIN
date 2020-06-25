@@ -45,6 +45,7 @@ def create_foldersystem_T(root, img_path_list, divisor,ticker):
   img = AICSImage(img_path_list[0])
   # img = img.get_image_data("ZYX", C=0 S=0, T=0,)
   print(img.shape)
+  nr_files = len(img_path_list)  ##
   image_resolution = img.shape[-1]
   nr_z_slices = img.shape[3]
   nr_channels = img.shape[2]
@@ -55,6 +56,7 @@ def create_foldersystem_T(root, img_path_list, divisor,ticker):
   print("The number of z-slizes is: " + str(nr_z_slices))
   print("The number of timepoints: " + str(nr_timepoints))
   print("The number of channels: " + str(nr_channels))
+  print("The number of files in folder: " + str(nr_files))
 
   multiplyer = image_resolution/divisor
   # z-dimension
@@ -83,7 +85,9 @@ def create_foldersystem_T(root, img_path_list, divisor,ticker):
         os.mkdir("%d" %(i))      # think how I can make a dictionary with the idfferent channels and destinations
         channel_dict[("{}".format(i))] = os.path.join(destination,("{}".format(i)))
   else:
-    if os.path.exists(destination):
+    if not os.path.exists(destination):
+      os.mkdir(destination)
+      os.chdir(destination)
       for i in range(nr_channels):
         channel_dict[("{}".format(i))] = os.path.join(destination,("{}".format(i)))
     else:
@@ -93,11 +97,9 @@ def create_foldersystem_T(root, img_path_list, divisor,ticker):
   os.chdir(destination)
 
   # os.chdir(split_img_path)
-  return nr_channels, nr_z_slices, nr_timepoints, destination, multiplyer, channel_dict
+  return nr_channels, nr_z_slices, nr_timepoints, destination, multiplyer, channel_dict, nr_files
   
-# nr_channels, nr_z_slices, nr_timepoints, destination ,multiplyer, channel_dict = create_foldersystem(root, folder_name, img_path_list)
-
-def run_code_T(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slices, multiplyer, channel_dict, divisor):
+def run_code_T(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slices, multiplyer, channel_dict, divisor, nr_files):
   #remove old log file if already existing
   # z-dimension
   # t = 0    ## for some reaosn I need to define the t outside of the function
@@ -115,7 +117,7 @@ def run_code_T(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slic
           # print(image_resolution)
           # log the names together
           txt_name_log = open(log_file_name, "a")
-          txt_name_log.write("{}, {}\n".format(("%03d" %(k)+"-" +"%03d"  %(z)), img_path), )
+          txt_name_log.write("{}, {}\n".format(("%03d" %(k)+"-" +"%03d"  %(z)), img_path))
           txt_name_log.close()
           for i in range(x_div):
             for j in range(y_div):
@@ -133,3 +135,4 @@ def run_code_T(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slic
                 writer2.save(img_crop)         
       k+=1
 # run_code(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slices, multiplyer, channel_dict)
+
