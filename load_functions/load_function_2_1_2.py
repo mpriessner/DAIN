@@ -30,7 +30,7 @@ def get_img_path_list_T(img_path_list, filepath):
 
 def load_img_T(img_path, channel, z, divisor):
     img = AICSImage(img_path)
-    img = img.get_image_data("TYX", S=0, Z=z, C=channel)
+    img = img.get_image_data("CYX", S=0, Z=z, T=channel)  # in my case channel is the Time
     # img = img.get_image_data("YX", S=0, T=0, C=0, Z=0)
     # print(img.shape, img.dtype)
     x_dim = img.shape[1]
@@ -40,6 +40,7 @@ def load_img_T(img_path, channel, z, divisor):
     return img, x_div, y_div
 # img, x_div, y_div = load_img_T(img_path):
 
+
 def create_foldersystem_T(root, img_path_list, divisor,ticker):
   #### Create folder structure ####
   img = AICSImage(img_path_list[0])
@@ -48,8 +49,8 @@ def create_foldersystem_T(root, img_path_list, divisor,ticker):
   nr_files = len(img_path_list)  ##
   image_resolution = img.shape[-1]
   nr_z_slices = img.shape[3]
-  nr_channels = img.shape[2]
-  nr_timepoints = img.shape[1]
+  nr_channels = img.shape[1]
+  nr_timepoints = img.shape[2]
   x_dim = img.shape[-1]
   y_dim = img.shape[-2] 
   print("The Resolution is: " + str(image_resolution))
@@ -89,35 +90,38 @@ def create_foldersystem_T(root, img_path_list, divisor,ticker):
       os.mkdir(destination)
       os.chdir(destination)
       for i in range(nr_channels):
+        os.mkdir("%d" %(i))
         channel_dict[("{}".format(i))] = os.path.join(destination,("{}".format(i)))
     else:
       os.chdir(destination)
       for i in range(nr_channels):
+        os.mkdir("%d" %(i))
         channel_dict[("{}".format(i))] = os.path.join(destination,("{}".format(i)))
   os.chdir(destination)
 
   # os.chdir(split_img_path)
   return nr_channels, nr_z_slices, nr_timepoints, destination, multiplyer, channel_dict, nr_files
   
+ 
 def run_code_T(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slices, multiplyer, channel_dict, divisor, nr_files):
   #remove old log file if already existing
   # z-dimension
   # t = 0    ## for some reaosn I need to define the t outside of the function
   # k ist for different z-depth points/files
-  k = 0
+  # k = 0
 
   #remove old log file if already existing
   log_file_name = os.path.join(destination,"name_log.txt")
   if os.path.exists(log_file_name):
     os.remove(log_file_name)
-  for img_path in tqdm(img_path_list):
+  for k in tqdm(range(len(img_path_list))):
       for channel in range(nr_channels):
         for z in range(nr_z_slices):
-          img, x_div, y_div = load_img_T(img_path, channel, z, divisor)
+          img, x_div, y_div = load_img_T(img_path_list[k], channel, z, divisor)
           # print(image_resolution)
           # log the names together
           txt_name_log = open(log_file_name, "a")
-          txt_name_log.write("{}, {}\n".format(("%03d" %(k)+"-" +"%03d"  %(z)), img_path))
+          txt_name_log.write("{}, {}\n".format(("%03d" %(k)+"-" +"%03d"  %(z)), img_path_list[k]))
           txt_name_log.close()
           for i in range(x_div):
             for j in range(y_div):
@@ -125,14 +129,11 @@ def run_code_T(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slic
               # print(str((i*divisor))+":"+ str(((i+1)*divisor))+":" +","+ str((j*divisor))+":"+str(((j+1)*divisor))+":")
               img_crop = img_crop[:,(i*divisor):((i+1)*divisor):,(j*divisor):((j+1)*divisor)]
               # cv2_imshow(img_crop)
-              print("%03d" %(k)+"-" +"%03d"  %(z) + "-"+"%02d" %((i*multiplyer)+j))
               name = ("%03d" %(k)+"-" +"%03d"  %(z) + "-"+"%02d" %((i*multiplyer)+j))
-              #swap the axis to be able to save as tif file
-              # img_crop = np.swapaxes(img_crop, 2, 0)
-              # print("saving image {}".format(name))
+
+              print("saving image {}".format(name))
               os.chdir(channel_dict[str(channel)])
               with OmeTiffWriter("{}.tif".format(name)) as writer2:
-                writer2.save(img_crop)         
-      k+=1
+                writer2.save(img_crop)     
+    
 # run_code(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slices, multiplyer, channel_dict)
-
