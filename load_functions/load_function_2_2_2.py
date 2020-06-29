@@ -47,8 +47,8 @@ def create_foldersystem_Z(root, img_path_list, divisor, ticker):
   print(img.shape)
   image_resolution = img.shape[-1]
   nr_z_slices = img.shape[3]
-  nr_channels = img.shape[2]
-  nr_timepoints = img.shape[1]
+  nr_channels = img.shape[1]
+  nr_timepoints = img.shape[2]
   x_dim = img.shape[-1]
   y_dim = img.shape[-2] 
   print("The Resolution is: " + str(image_resolution))
