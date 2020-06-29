@@ -109,25 +109,27 @@ def run_code_Z(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slic
   for k in tqdm(range(len(img_path_list))):
       for channel in range(nr_channels):
         for t in range(nr_timepoints):
-          img, x_div, y_div = load_img_Z(img_path_list[k], channel, t, divisor)
-          # print(image_resolution)
-          # log the names together
-          txt_name_log = open(log_file_name, "a")
-          txt_name_log.write("{}, {}\n".format(("%03d" %(k)+"-" +"%03d"  %(t)), img_path_list[k]), )
-          txt_name_log.close()
-          for i in range(x_div):
-            for j in range(y_div):
-              img_crop = img
-              # print(str((i*divisor))+":"+ str(((i+1)*divisor))+":" +","+ str((j*divisor))+":"+str(((j+1)*divisor))+":")
-              img_crop = img_crop[:,(i*divisor):((i+1)*divisor):,(j*divisor):((j+1)*divisor)]
-              # cv2_imshow(img_crop)
-              name = ("%03d" %(k)+"-" +"%03d"  %(t) + "-"+"%02d" %((i*multiplyer)+j))
-              #swap the axis to be able to save as tif file
-              # img_crop = np.swapaxes(img_crop, 2, 0)
-              print("saving image {}".format(name))
-              os.chdir(channel_dict[str(channel)])
-              with OmeTiffWriter("{}.tif".format(name)) as writer2:
-                writer2.save(img_crop)         
-     
+          try:
+            img, x_div, y_div = load_img_Z(img_path_list[k], channel, t, divisor)
+            # print(image_resolution)
+            # log the names together
+            txt_name_log = open(log_file_name, "a")
+            txt_name_log.write("{}, {}\n".format(("%03d" %(k)+"-" +"%03d"  %(t)), img_path_list[k]), )
+            txt_name_log.close()
+            for i in range(x_div):
+              for j in range(y_div):
+                img_crop = img
+                # print(str((i*divisor))+":"+ str(((i+1)*divisor))+":" +","+ str((j*divisor))+":"+str(((j+1)*divisor))+":")
+                img_crop = img_crop[:,(i*divisor):((i+1)*divisor):,(j*divisor):((j+1)*divisor)]
+                # cv2_imshow(img_crop)
+                name = ("%03d" %(k)+"-" +"%03d"  %(t) + "-"+"%02d" %((i*multiplyer)+j))
+                #swap the axis to be able to save as tif file
+                # img_crop = np.swapaxes(img_crop, 2, 0)
+                print("saving image {}".format(name))
+                os.chdir(channel_dict[str(channel)])
+                with OmeTiffWriter("{}.tif".format(name)) as writer2:
+                  writer2.save(img_crop)         
+          except:
+            print("This file has a smaller T-dimension that the first one loaded")
 
 # run_code_Z(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slices, multiplyer, channel_dict)
