@@ -30,7 +30,7 @@ def get_img_path_list_Z(img_path_list, filepath):
 
 def load_img_Z(img_path, channel, t, divisor):
     img = AICSImage(img_path)
-    img = img.get_image_data("ZYX", S=0, T=t, C=channel)
+    img = img.get_image_data("ZYX", S=0, T=channel, C=t) ### because the image gets read in like that
     # img = img.get_image_data("YX", S=0, T=0, C=0, Z=0)
     # print(img.shape, img.dtype)
     x_dim = img.shape[1]
@@ -38,7 +38,7 @@ def load_img_Z(img_path, channel, t, divisor):
     x_div = x_dim//divisor
     y_div = y_dim//divisor
     return img, x_div, y_div
-# img, x_div, y_div = load_img_Z(img_path):
+
 
 def create_foldersystem_Z(root, img_path_list, divisor, ticker):
   #### Create folder structure ####
@@ -94,28 +94,26 @@ def create_foldersystem_Z(root, img_path_list, divisor, ticker):
 
   # os.chdir(split_img_path)
   return nr_channels, nr_z_slices, nr_timepoints, destination, multiplyer, channel_dict
-  
-# nr_channels, nr_z_slices, nr_timepoints, destination ,multiplyer, channel_dict = create_foldersystem_Z(root, folder_name, img_path_list)
-
+ 
 def run_code_Z(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slices, multiplyer, channel_dict, divisor):
   #remove old log file if already existing
   # z-dimension
   # t = 0    ## for some reaosn I need to define the t outside of the function
   # k ist for different z-depth points/files
-  k = 0
+  # k = 0
 
   #remove old log file if already existing
   log_file_name = os.path.join(destination,"name_log.txt")
   if os.path.exists(log_file_name):
     os.remove(log_file_name)
-  for img_path in tqdm(img_path_list):
+  for k in tqdm(range(len(img_path_list))):
       for channel in range(nr_channels):
         for t in range(nr_timepoints):
-          img, x_div, y_div = load_img_Z(img_path, channel, t, divisor)
+          img, x_div, y_div = load_img_Z(img_path_list[k], channel, t, divisor)
           # print(image_resolution)
           # log the names together
           txt_name_log = open(log_file_name, "a")
-          txt_name_log.write("{}, {}\n".format(("%03d" %(k)+"-" +"%03d"  %(t)), img_path), )
+          txt_name_log.write("{}, {}\n".format(("%03d" %(k)+"-" +"%03d"  %(t)), img_path_list[k]), )
           txt_name_log.close()
           for i in range(x_div):
             for j in range(y_div):
@@ -123,14 +121,13 @@ def run_code_Z(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slic
               # print(str((i*divisor))+":"+ str(((i+1)*divisor))+":" +","+ str((j*divisor))+":"+str(((j+1)*divisor))+":")
               img_crop = img_crop[:,(i*divisor):((i+1)*divisor):,(j*divisor):((j+1)*divisor)]
               # cv2_imshow(img_crop)
-              print("%03d" %(k)+"-" +"%03d"  %(t) + "-"+"%02d" %((i*multiplyer)+j))
               name = ("%03d" %(k)+"-" +"%03d"  %(t) + "-"+"%02d" %((i*multiplyer)+j))
               #swap the axis to be able to save as tif file
               # img_crop = np.swapaxes(img_crop, 2, 0)
-              # print("saving image {}".format(name))
+              print("saving image {}".format(name))
               os.chdir(channel_dict[str(channel)])
               with OmeTiffWriter("{}.tif".format(name)) as writer2:
                 writer2.save(img_crop)         
-      k+=1
+     
 
 # run_code_Z(destination, img_path_list, nr_channels, nr_timepoints, nr_z_slices, multiplyer, channel_dict)
