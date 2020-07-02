@@ -135,7 +135,7 @@ def run_code(filepath_list, destination, destination_gt, i, t, images_jump):
     os.chdir(destination)
 
 
-  def run_code_sample(filepath_list, destination, i, t):
+def run_code_sample(filepath_list, destination, i, t):
   # create virtual number of files
     images_jump = 1
     print(filepath_list[i])
