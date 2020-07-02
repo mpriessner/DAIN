@@ -30,7 +30,7 @@ def get_img_path_list_Z(img_path_list, filepath):
 
 def load_img_Z(img_path, channel, t, divisor):
     img = AICSImage(img_path)
-    img = img.get_image_data("ZYX", S=0, T=channel, C=t) ### because the image gets read in like that
+    img = img.get_image_data("ZYX", S=0, T=t, C=channel) 
     # img = img.get_image_data("YX", S=0, T=0, C=0, Z=0)
     # print(img.shape, img.dtype)
     x_dim = img.shape[1]
@@ -47,8 +47,8 @@ def create_foldersystem_Z(root, img_path_list, divisor, ticker):
   print(img.shape)
   image_resolution = img.shape[-1]
   nr_z_slices = img.shape[3]
-  nr_channels = img.shape[1]
-  nr_timepoints = img.shape[2]
+  nr_channels = img.shape[2]
+  nr_timepoints = img.shape[1]
   x_dim = img.shape[-1]
   y_dim = img.shape[-2] 
   print("The Resolution is: " + str(image_resolution))
