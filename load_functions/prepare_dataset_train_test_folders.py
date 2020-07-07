@@ -251,7 +251,7 @@ def perform_prep_predict_t_creation(img_path_list, file_num,  sub_save_location)
           with png_writer.PngWriter("im2.png") as writer2:
             writer2.save(img_save_2)
 
-def perform_max_t_creation(img_path_list, file_num,  sub_save_location):
+def perform_max_t_creation(img_path_list, file_num,  sub_save_location, split_training_test):
     os.chdir(sub_save_location)
     sub_folder = "sequences"
     sequence_path = os.path.join(sub_save_location, sub_folder)
@@ -304,7 +304,7 @@ def perform_max_t_creation(img_path_list, file_num,  sub_save_location):
           writer2.save(img_save_3)
         print("{}/{}\n".format(file_folder,slice_folder))
 
-def perform_max_z_creation(img_path_list, file_num,  sub_save_location):
+def perform_max_z_creation(img_path_list, file_num,  sub_save_location, split_training_test):
     os.chdir(sub_save_location)
     sub_folder = "sequences"
     sequence_path = os.path.join(sub_save_location, sub_folder)
