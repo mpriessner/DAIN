@@ -42,7 +42,7 @@ def make_folder_with_date(save_location, name):
     h = "00"
   else:
     h = "12"
-  sub_save_location = save_location + "/" + today.strftime('%Y%m%d%H')+ "_"+ today.strftime('%H%M%S')+ "_%s"%name
+  sub_save_location = save_location + "/" + today.strftime('%Y%m%d')+ "_"+ today.strftime('%H%M%S')+ "_%s"%name
   os.mkdir(sub_save_location)
   return sub_save_location
 
