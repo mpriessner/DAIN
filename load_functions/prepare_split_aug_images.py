@@ -32,7 +32,7 @@ def make_folder_with_date(save_location, name):
   return sub_save_location
 
 
-def diplay_img_info(img):
+def diplay_img_info(img, divisor):
   ### display image data
     image_resolution = img.shape[-1]
     nr_z_slices = img.shape[2]
