@@ -29,7 +29,7 @@ def train():
         model = model.cuda()
 
     if not args.SAVED_MODEL==None:
-        args.SAVED_MODEL ='/content/DAIN/model_weights/'+ args.SAVED_MODEL + "/best" + ".pth"
+        args.SAVED_MODEL ='/content/DAIN/model_weights'+ args.SAVED_MODEL + "/best" + ".pth"
         # args.SAVED_MODEL ='./model_weights/best.pth'
         print("Fine tuning on " +  args.SAVED_MODEL)
         if not  args.use_cuda:
