@@ -16,6 +16,7 @@ import imageio
 import tifffile 
 from aicsimageio.transforms import reshape_data
 from datetime import datetime
+import math
 
 def get_img_path_list(img_path_list, img_folder_path):
   ''' Creates a list of image-path that will be used for loading the images later'''
