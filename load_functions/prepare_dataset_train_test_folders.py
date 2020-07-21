@@ -16,6 +16,7 @@ import imageio
 import tifffile 
 from aicsimageio.transforms import reshape_data
 from datetime import datetime
+import math
 
 def get_img_path_list(img_path_list, img_folder_path):
   ''' Creates a list of image-path that will be used for loading the images later'''
@@ -160,7 +161,7 @@ def perform_prep_predict_z_creation(img_path_list, file_num,  sub_save_location)
     images_jump =2
    #create new directory-path
     for t_num in tqdm(range(0,t)):
-        for z_num in range((z//images_jump)-1):
+        for z_num in range(math.ceil(z/images_jump)-1): # rounds up to then remove the last one to not overshoot in the counting
         #create new directory-path
           file_folder = ("f_%03d" %(file_num)+"-" +"z_%03d"%(z_num) + "-"+"t_%03d" %(t_num))
           os.chdir(folder_gt)
@@ -173,8 +174,8 @@ def perform_prep_predict_z_creation(img_path_list, file_num,  sub_save_location)
 
           #here put the image pngs into the folder (instead of creating the folder)
           #convert image to unit8 otherwise warning
-          first = t_num* images_jump
-          second = t_num*images_jump+images_jump
+          first = z_num* images_jump
+          second = z_num*images_jump+images_jump
           img_save_1 = reshape_data(img, "TZXY","XY", T=t_num, Z=first)
           img_save_1 = create_3D_image(img_save_1, x_dim, y_dim)
           img_save_1 = convert(img_save_1, 0, 255, np.uint8)
@@ -214,7 +215,7 @@ def perform_prep_predict_t_creation(img_path_list, file_num,  sub_save_location)
     images_jump =2
    #create new directory-path
     for z_num in tqdm(range(0,z)):
-        for t_num in range((t//images_jump)-1):
+        for t_num in range(math.ceil(t/images_jump)-1):
         #create new directory-path
           file_folder = ("f_%03d" %(file_num)+"-" +"z_%03d"%(z_num) + "-"+"t_%03d" %(t_num))
           os.chdir(folder_gt)
