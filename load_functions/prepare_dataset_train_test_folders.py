@@ -256,8 +256,11 @@ def perform_max_t_creation(img_path_list, file_num,  sub_save_location, split_tr
     os.chdir(sub_save_location)
     sub_folder = "sequences"
     sequence_path = os.path.join(sub_save_location, sub_folder)
-    os.mkdir(sequence_path)
-    os.chdir(sequence_path)
+    if not os.path.exists(sequence_path):
+      os.mkdir(sequence_path)
+      os.chdir(sequence_path)
+    else:
+      os.chdir(sequence_path)
     t, z, y_dim,x_dim, img = load_img(img_path_list[file_num])
 
     # txt_name_log = open(destination + "/name_log.txt", "a")
@@ -266,7 +269,7 @@ def perform_max_t_creation(img_path_list, file_num,  sub_save_location, split_tr
 
     for z_num in tqdm(range(0,z)):
     #create new directory-path
-      file_folder = "%02d" % (z_num+1)
+      file_folder = "%02d" % (z_num+1+file_num*z)
       z_folder = os.path.join(sequence_path, file_folder)
       os.mkdir(z_folder)  
       os.chdir(z_folder)
@@ -309,8 +312,11 @@ def perform_max_z_creation(img_path_list, file_num,  sub_save_location, split_tr
     os.chdir(sub_save_location)
     sub_folder = "sequences"
     sequence_path = os.path.join(sub_save_location, sub_folder)
-    os.mkdir(sequence_path)
-    os.chdir(sequence_path)
+    if not os.path.exists(sequence_path):
+      os.mkdir(sequence_path)
+      os.chdir(sequence_path)
+    else:
+      os.chdir(sequence_path)
     t, z, y_dim,x_dim, img = load_img(img_path_list[file_num])
 
     # txt_name_log = open(destination + "/name_log.txt", "a")
@@ -319,7 +325,7 @@ def perform_max_z_creation(img_path_list, file_num,  sub_save_location, split_tr
 
     for t_num in tqdm(range(0,t)):
     #create new directory-path
-      file_folder = "%02d" % (t_num+1)
+      file_folder = "%02d" % (t_num+1+file_num*t)
       t_folder = os.path.join(sequence_path, file_folder)
       os.mkdir(t_folder)  
       os.chdir(t_folder)
