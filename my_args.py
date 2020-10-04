@@ -37,7 +37,6 @@ parser.add_argument('--filter_size', '-f', type=int, default=4, help = 'the size
 # add to my_args.py
 parser.add_argument('--predict', dest='SAVED_MODEL', default=None, help ='path to the pretrained model weights')
 
-
 parser.add_argument('--lr', type =float, default= 0.002, help= 'the basic learning rate for three subnetworks (default: 0.002)')
 parser.add_argument('--rectify_lr', type=float, default=0.001, help  = 'the learning rate for rectify/refine subnetworks (default: 0.001)')
 
@@ -82,7 +81,7 @@ if args.uid == None:
     unique_id = str(numpy.random.randint(0, 100000))
     print("revise the unique id to a random numer " + str(unique_id))
     args.uid = unique_id
-    timestamp = datetime.datetime.now().strftime("%a-%b-%d-%H:%M")
+    timestamp = datetime.datetime.now().strftime("%a-%b-%d-%H-%M")
     save_path = './model_weights/'+ args.uid  +'-' + timestamp
 else:
     save_path = './model_weights/'+ str(args.uid)
@@ -123,4 +122,3 @@ if args.use_cudnn:
 else:
     print("cudnn is not used")
     torch.backends.cudnn.benchmark = False  # to speed up the
-
