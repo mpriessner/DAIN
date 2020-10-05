@@ -74,11 +74,12 @@ int correlation_forward_cuda(at::Tensor& input1, at::Tensor& input2, at::Tensor&
 //			at::globalContext().getCurrentCUDAStream() //works for 0.4.1
            at::cuda::getCurrentCUDAStream() //works for 1.0.0
   );
-
+// commented it out because of the following hing
+  //https://github.com/NVIDIA/flownet2-pytorch/issues/114
   //check for errors
-  if (!success) {
-    AT_ERROR("CUDA call failed");
-  }
+ // if (!success) {
+ //   AT_ERROR("CUDA call failed");
+ // }
 
   return 1;
 
