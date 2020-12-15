@@ -41,7 +41,7 @@ nvcc_args = [
     # Jetson: (None)
     '-gencode', 'arch=compute_75,code=sm_75',
 
-    # '-gencode', 'arch=compute_70,code=sm_70',
+    '-gencode', 'arch=compute_70,code=sm_70',
     # '-gencode', 'arch=compute_70,code=compute_70'
 
     '-w' # Ignore compiler warnings.
